@@ -20,12 +20,6 @@ public class Todo {
         // Empty constructor used by Hibernate
     }
 
-    Todo(String title, Boolean completed, Integer order) {
-        this.title = title;
-        this.completed = completed;
-        this.order = order;
-    }
-
     public Long getId() {
         return this.id;
     }
