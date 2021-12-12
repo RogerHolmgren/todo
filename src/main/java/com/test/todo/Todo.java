@@ -17,6 +17,7 @@ public class Todo {
     private Integer order;
 
     Todo() {
+        // Empty constructor used by Hibernate
     }
 
     Todo(String title, Boolean completed, Integer order) {

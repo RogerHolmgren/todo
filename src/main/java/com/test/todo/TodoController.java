@@ -16,16 +16,21 @@ class TodoController {
 
 
     @GetMapping("/todos")
-    List<TodoDto> all() {
-        List<Todo> mylist = repository.findAll();
-
-        return mylist.stream()
+    List<TodoDto> getTodos() {
+        return repository.findAll().stream()
                 .map(TodoDtoGenerator::get)
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/todos/{id}")
+    TodoDto getTodo(@PathVariable Long id) {
+        return TodoDtoGenerator.get(
+                repository.findById(id)
+                        .orElseThrow(() -> new TodoNotFoundException(id)));
+    }
+
     @PostMapping("/todos")
-    TodoDto newTodo(@RequestBody Todo newTodo) {
+    TodoDto postTodo(@RequestBody Todo newTodo) {
         if (newTodo.getCompleted() == null) {
             newTodo.setCompleted(false);
         }
@@ -33,15 +38,8 @@ class TodoController {
         return TodoDtoGenerator.get(repository.save(newTodo));
     }
 
-    @GetMapping("/todos/{id}")
-    TodoDto one(@PathVariable Long id) {
-        return TodoDtoGenerator.get(
-                repository.findById(id)
-                        .orElseThrow(() -> new TodoNotFoundException(id)));
-    }
-
     @PutMapping("/todos/{id}")
-    TodoDto replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
+    TodoDto putTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
         return repository.findById(id)
                 .map(todo -> {
                     todo.setTitle(newTodo.getTitle());
@@ -80,11 +78,5 @@ class TodoController {
     @DeleteMapping("/todos")
     void deleteTodos() {
         repository.deleteAll();
-    }
-
-    static class TodoNotFoundException extends RuntimeException {
-        TodoNotFoundException(Long id) {
-            super("Could not find todo with id: " + id);
-        }
     }
 }
