@@ -22,15 +22,9 @@ class TodoController {
     List<TodoDto> all() {
         List<Todo> mylist = repository.findAll();
 
-        List<TodoDto> dtoList = mylist.stream()
-                .map(TodoDto::new)
-                .map(dto -> {
-                    dto.setUrl(baseUrl + dto.getId());
-                    return dto;
-                })
+        return mylist.stream()
+                .map(TodoDtoGenerator::get)
                 .collect(Collectors.toList());
-
-        return dtoList;
     }
 
     @PostMapping("/todos")
@@ -38,32 +32,30 @@ class TodoController {
         if (newTodo.getCompleted() == null) {
             newTodo.setCompleted(false);
         }
-        Todo trueResponse = repository.save(newTodo);
-        TodoDto dto = new TodoDto(trueResponse);
-        dto.setUrl("sadfsafds");
 
-        return dto;
+        return TodoDtoGenerator.get(repository.save(newTodo));
     }
 
     @GetMapping("/todos/{id}")
-    Todo one(@PathVariable Long id) {
+    TodoDto one(@PathVariable Long id) {
 
-        return repository.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException(id));
+        return TodoDtoGenerator.get(
+                repository.findById(id)
+                        .orElseThrow(() -> new TodoNotFoundException(id)));
     }
 
     @PutMapping("/todos/{id}")
-    Todo replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
+    TodoDto replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
 
         return repository.findById(id)
                 .map(todo -> {
                     todo.setTitle(newTodo.getTitle());
                     todo.setCompleted(newTodo.getCompleted());
-                    return repository.save(todo);
+                    return TodoDtoGenerator.get(repository.save(todo));
                 })
                 .orElseGet(() -> {
                     newTodo.setId(id);
-                    return repository.save(newTodo);
+                    return TodoDtoGenerator.get(repository.save(newTodo));
                 });
     }
 
