@@ -10,15 +10,11 @@ public class Todo {
 
     @Id
     @GeneratedValue
-    private Long id;
+    private long id;
     private String title;
     private Boolean completed;
     @Column(name="todoOrder")
     private Integer order;
-
-    Todo() {
-        // Empty constructor used by Hibernate
-    }
 
     public Long getId() {
         return this.id;
