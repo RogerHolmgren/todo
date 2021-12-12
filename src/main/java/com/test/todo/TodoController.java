@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin("*")
 @RestController
 class TodoController {
-
-    String baseUrl = "/todos"; // TODO do better
-
     private final TodoRepository repository;
 
     TodoController(TodoRepository repository) {
@@ -38,7 +35,6 @@ class TodoController {
 
     @GetMapping("/todos/{id}")
     TodoDto one(@PathVariable Long id) {
-
         return TodoDtoGenerator.get(
                 repository.findById(id)
                         .orElseThrow(() -> new TodoNotFoundException(id)));
@@ -46,7 +42,6 @@ class TodoController {
 
     @PutMapping("/todos/{id}")
     TodoDto replaceTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
-
         return repository.findById(id)
                 .map(todo -> {
                     todo.setTitle(newTodo.getTitle());
@@ -57,6 +52,21 @@ class TodoController {
                     newTodo.setId(id);
                     return TodoDtoGenerator.get(repository.save(newTodo));
                 });
+    }
+
+    @PatchMapping("/todos/{id}")
+    TodoDto patchTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
+        return repository.findById(id)
+                .map(todo -> {
+                    if (newTodo.getTitle() != null) {
+                        todo.setTitle(newTodo.getTitle());
+                    }
+                    if (newTodo.getCompleted() != null) {
+                        todo.setCompleted(newTodo.getCompleted());
+                    }
+                    return TodoDtoGenerator.get(repository.save(todo));
+                })
+                .orElseThrow(() -> new TodoNotFoundException(id));
     }
 
     @DeleteMapping("/todos/{id}")
