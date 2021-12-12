@@ -38,20 +38,6 @@ class TodoController {
         return TodoDtoGenerator.get(repository.save(newTodo));
     }
 
-    @PutMapping("/todos/{id}")
-    TodoDto putTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
-        return repository.findById(id)
-                .map(todo -> {
-                    todo.setTitle(newTodo.getTitle());
-                    todo.setCompleted(newTodo.getCompleted());
-                    return TodoDtoGenerator.get(repository.save(todo));
-                })
-                .orElseGet(() -> {
-                    newTodo.setId(id);
-                    return TodoDtoGenerator.get(repository.save(newTodo));
-                });
-    }
-
     @PatchMapping("/todos/{id}")
     TodoDto patchTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
         return repository.findById(id)
