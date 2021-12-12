@@ -6,21 +6,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
-public class Todo {
+public class TodoDto {
 
-    @Id
-    @GeneratedValue
     private Long id;
     private String title;
     private Boolean completed;
+    private String url;
 
-    Todo() {
-    }
-
-    Todo(String title, Boolean completed) {
-        this.title = title;
-        this.completed = completed;
+    // Lägg on url direkt och förenkla i Controllern
+    TodoDto(Todo todo) {
+        this.id = todo.getId();
+        this.title = todo.getTitle();
+        this.completed = todo.getCompleted();
     }
 
     public Long getId() {
@@ -45,5 +42,13 @@ public class Todo {
 
     public void setCompleted(Boolean completed) {
         this.completed = completed;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

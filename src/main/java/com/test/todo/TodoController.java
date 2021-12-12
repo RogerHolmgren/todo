@@ -1,12 +1,15 @@
 package com.test.todo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin("*")
 @RestController
 class TodoController {
+
+    String baseUrl = "/todos"; // TODO do better
 
     private final TodoRepository repository;
 
@@ -16,17 +19,30 @@ class TodoController {
 
 
     @GetMapping("/todos")
-    List<Todo> all() {
-        return repository.findAll();
+    List<TodoDto> all() {
+        List<Todo> mylist = repository.findAll();
+
+        List<TodoDto> dtoList = mylist.stream()
+                .map(TodoDto::new)
+                .map(dto -> {
+                    dto.setUrl(baseUrl + dto.getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return dtoList;
     }
 
     @PostMapping("/todos")
-    Todo newTodo(@RequestBody Todo newTodo) {
+    TodoDto newTodo(@RequestBody Todo newTodo) {
         if (newTodo.getCompleted() == null) {
             newTodo.setCompleted(false);
         }
+        Todo trueResponse = repository.save(newTodo);
+        TodoDto dto = new TodoDto(trueResponse);
+        dto.setUrl("sadfsafds");
 
-        return repository.save(newTodo);
+        return dto;
     }
 
     @GetMapping("/todos/{id}")
