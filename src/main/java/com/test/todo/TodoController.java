@@ -64,6 +64,9 @@ class TodoController {
                     if (newTodo.getCompleted() != null) {
                         todo.setCompleted(newTodo.getCompleted());
                     }
+                    if (newTodo.getOrder() != null) {
+                        todo.setOrder(newTodo.getOrder());
+                    }
                     return TodoDtoGenerator.get(repository.save(todo));
                 })
                 .orElseThrow(() -> new TodoNotFoundException(id));

@@ -1,23 +1,18 @@
 package com.test.todo;
 
-import java.util.Objects;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
 public class TodoDto {
 
-    private Long id;
-    private String title;
-    private Boolean completed;
-    private String url;
+    private final Long id;
+    private final String title;
+    private final Boolean completed;
+    private final Integer order;
+    private final String url;
 
-    // Lägg on url direkt och förenkla i Controllern
     TodoDto(Todo todo, String url) {
         this.id = todo.getId();
         this.title = todo.getTitle();
         this.completed = todo.getCompleted();
+        this.order = todo.getOrder();
         this.url = url;
     }
 
@@ -31,6 +26,10 @@ public class TodoDto {
 
     public Boolean getCompleted() {
         return completed;
+    }
+
+    public Integer getOrder() {
+        return order;
     }
 
     public String getUrl() {

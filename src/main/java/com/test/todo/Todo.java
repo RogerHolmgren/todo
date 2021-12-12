@@ -1,7 +1,6 @@
 package com.test.todo;
 
-import java.util.Objects;
-
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,13 +13,16 @@ public class Todo {
     private Long id;
     private String title;
     private Boolean completed;
+    @Column(name="todoOrder")
+    private Integer order;
 
     Todo() {
     }
 
-    Todo(String title, Boolean completed) {
+    Todo(String title, Boolean completed, Integer order) {
         this.title = title;
         this.completed = completed;
+        this.order = order;
     }
 
     public Long getId() {
@@ -45,5 +47,13 @@ public class Todo {
 
     public void setCompleted(Boolean completed) {
         this.completed = completed;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 }

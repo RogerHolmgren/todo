@@ -33,18 +33,23 @@ class TodoApplicationTests {
 
     @Test
     void postTest() throws Exception {
+        TodoDto dto = new TodoDto(new Todo("hej", false, 10), null);
+
         mockMvc.perform(post("/todos")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new Todo("hej", false))))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("hej"));
+                .andExpect(jsonPath("$.title").value("hej"))
+                .andExpect(jsonPath("$.order").value(10));
     }
 
     @Test
     void patchTest() throws Exception {
+        TodoDto dto = new TodoDto(new Todo(null, false, null), null);
+
         mockMvc.perform(patch("/todos/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new Todo(null, false))))
+                        .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Do Stuff"))
                 .andExpect(jsonPath("$.completed").value(false));

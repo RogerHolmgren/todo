@@ -15,8 +15,8 @@ public class InitDB {
     CommandLineRunner initDatabase(TodoRepository repository) {
 
         return args -> {
-            log.info("Preloading " + repository.save(new Todo("Do Stuff", true)));
-            log.info("Preloading " + repository.save(new Todo("Do Other Stuff", false)));
+            log.info("Preloading " + repository.save(new Todo("Do Stuff", true, 10)));
+            log.info("Preloading " + repository.save(new Todo("Do Other Stuff", false, 20)));
         };
     }
 }
