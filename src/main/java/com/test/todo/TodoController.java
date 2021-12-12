@@ -40,6 +40,7 @@ class TodoController {
 
     @PatchMapping("/todos/{id}")
     TodoDto patchTodo(@RequestBody Todo newTodo, @PathVariable Long id) {
+        // TODO: This should use some json-path patch functionality...
         return repository.findById(id)
                 .map(todo -> {
                     if (newTodo.getTitle() != null) {

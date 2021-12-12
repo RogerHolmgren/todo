@@ -2,6 +2,7 @@ package com.test.todo;
 
 public class TodoDtoGenerator {
 
+    // TODO: This should not be hard-coded.
     private static final String BASE_URL = "http://localhost:8080/todos";
 
     private TodoDtoGenerator() {}
