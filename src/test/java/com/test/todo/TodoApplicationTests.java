@@ -39,4 +39,14 @@ class TodoApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("hej"));
     }
+
+    @Test
+    void patchTest() throws Exception {
+        mockMvc.perform(patch("/todos/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new Todo(null, false))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Do Stuff"))
+                .andExpect(jsonPath("$.completed").value(false));
+    }
 }
